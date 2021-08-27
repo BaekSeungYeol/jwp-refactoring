@@ -14,14 +14,14 @@ public class ProductService {
     private final ProductDao productDao;
 
     public ProductService(final ProductDao productDao) {
-        this.productDao = productDao;
-    }
+            this.productDao = productDao;
+        }
 
-    @Transactional
-    public Product create(final Product product) {
-        final BigDecimal price = product.getPrice();
+        @Transactional
+        public Product create(final Product product) {
+            final BigDecimal price = product.getPrice();
 
-        if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
+            if (Objects.isNull(price) || price.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException();
         }
 
