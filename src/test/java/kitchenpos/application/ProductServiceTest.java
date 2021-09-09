@@ -2,8 +2,7 @@ package kitchenpos.application;
 
 import kitchenpos.dao.ProductDao;
 import kitchenpos.domain.Product;
-import kitchenpos.domain.TestDomainConstructor;
-import org.assertj.core.api.Assertions;
+import kitchenpos.domain.Fixtures;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +29,8 @@ class ProductServiceTest {
         //given
         String name = "상품1";
         int price = 100;
-        Product product = TestDomainConstructor.product(name,price);
-        Product savedProduct = TestDomainConstructor.productWithId(name,price,1L);
+        Product product = Fixtures.product(name,price);
+        Product savedProduct = Fixtures.productWithId(name,price,1L);
         when(productDao.save(product)).thenReturn(savedProduct);
 
         // when
@@ -45,7 +44,7 @@ class ProductServiceTest {
     @DisplayName("상품 등록 시, 상품의 가격이 없으면 IllegalArgumentException을 Throw 해야 한다.")
     void createPriceNull() {
         // given
-        Product emptyPriceProduct = TestDomainConstructor.product("상품1", null);
+        Product emptyPriceProduct = Fixtures.product("상품1", null);
 
         // when-then
         assertThatThrownBy(() -> productService.create(emptyPriceProduct))
@@ -57,7 +56,7 @@ class ProductServiceTest {
     @DisplayName("상품 ㅁ등록 시, 가격이 0원 미만이면 IllegalArgumentException을 Throw 해야 한다.")
     void createPriceLessThanZero() {
         // given
-        Product emptyPriceProduct = TestDomainConstructor.product("상품1", -200);
+        Product emptyPriceProduct = Fixtures.product("상품1", -200);
 
         // when-then
         assertThatThrownBy(() -> productService.create(emptyPriceProduct))

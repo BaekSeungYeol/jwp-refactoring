@@ -1,8 +1,8 @@
 package kitchenpos.ui;
 
 import kitchenpos.BaseControllerTest;
+import kitchenpos.domain.Fixtures;
 import kitchenpos.domain.Product;
-import kitchenpos.domain.TestDomainConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -22,7 +22,7 @@ class ProductRestControllerTest extends BaseControllerTest {
         //given
         String name = "상품1";
         int price = 100;
-        Product product = TestDomainConstructor.product(name,price);
+        Product product = Fixtures.product(name,price);
         //when
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
