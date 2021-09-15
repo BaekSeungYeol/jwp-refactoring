@@ -38,4 +38,30 @@ public class Fixtures {
         order.setOrderLineItems(orderLineItems);
         return order;
     }
+
+    public static Order orderWithId(Long tableId, String orderStatus, LocalDateTime now, List<OrderLineItem> orderLineItems, Long orderId) {
+        Order order = order(tableId,orderStatus,now,orderLineItems);
+        order.setId(orderId);
+        return order;
+    }
+
+    public static OrderTable orderTableWithId(long tableGroupId, int numberOfGuests, boolean empty, Long tableId) {
+        OrderTable orderTable = orderTable(tableGroupId,numberOfGuests,empty);
+        orderTable.setId(tableId);
+        return orderTable;
+    }
+
+    private static OrderTable orderTable(long tableGroupId, int numberOfGuests, boolean empty) {
+        OrderTable orderTable = new OrderTable();
+        orderTable.setTableGroupId(tableGroupId);
+        orderTable.setNumberOfGuests(numberOfGuests);
+        orderTable.setEmpty(empty);
+        return orderTable;
+    }
+
+    public static OrderLineItem orderLineItemWithSeq(Long orderId, Long menuId, int quantity, long seq) {
+        OrderLineItem orderLineItem = orderLineItem(orderId,menuId,quantity);
+        orderLineItem.setSeq(seq);
+        return orderLineItem;
+    }
 }

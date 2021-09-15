@@ -8,10 +8,9 @@ import kitchenpos.domain.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.RequestBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class OrderRestControllerTest extends BaseControllerTest {
     private List<OrderLineItem> orderLineItems;
     private Order order;
     private int orderItemSize;
-    private static final Long ORDER_ID = 1L;
+    private static final Long NEW_ORDER_ID = 1L;
     private static final Long NOT_EMPTY_ORDER_TABLE_ID = 9L;
 
     @BeforeEach
@@ -79,6 +78,28 @@ public class OrderRestControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("$..seq").isNotEmpty())
                 .andExpect(jsonPath("$..orderId").isNotEmpty());
 
+    }
+
+    @Test
+    @DisplayName("주문 조리 상태를 수정할 수 있다.")
+    void updateOrder() throws Exception {
+        createOrder();
+        Order savedOrder  = Fixtures.orderWithId(NOT_EMPTY_ORDER_TABLE_ID, OrderStatus.MEAL.name(),
+                LocalDateTime.now(), orderLineItems, NEW_ORDER_ID);
+
+        /*
+        "/api/orders/{orderId}/order-status")
+         */
+        mockMvc.perform(put(String.format("/api/orders/%d/order-status", NEW_ORDER_ID))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(savedOrder)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(NEW_ORDER_ID))
+                .andExpect(jsonPath("$.orderStatus").value(OrderStatus.MEAL.name()))
+                .andExpect(jsonPath("$.orderedTime").isNotEmpty())
+                .andExpect(jsonPath("$..seq", hasSize(orderItemSize)))
+                .andExpect(jsonPath("$..orderId", hasSize(orderItemSize)));
     }
 
 }
