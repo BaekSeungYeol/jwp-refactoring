@@ -13,19 +13,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
 
@@ -136,6 +135,86 @@ public class OrderServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("주문 등록 시, 메뉴 등록이 되어 있지 않으면 IllegalArgumentException을 throw 해야 한다.")
+    void createNotExistMenus() {
+
+        Order notExistMenus = Fixtures.order(NOT_EMPTY_TABLE_ID, null, null, orderLineItems);
+        when(menuDao.countByIdIn(MENU_IDS)).thenReturn(1L);
+
+        assertThatThrownBy(() -> orderService.create(notExistMenus))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("주문의 목록을 주문의 상품목록과 함께 조회할 수 있다.")
+    void list() {
+
+        OrderLineItem orderLineItem = mock(OrderLineItem.class);
+
+        //given
+        Order ordersWithTwoLines = Fixtures.orderWithId(NOT_EMPTY_TABLE_ID,null,null,
+                Arrays.asList(orderLineItem, orderLineItem),1L);
+        Order ordersWithThreeLines = Fixtures.orderWithId(NOT_EMPTY_TABLE_ID,null,null,
+                Arrays.asList(orderLineItem, orderLineItem, orderLineItem),2L);
+
+        when(orderDao.findAll()).thenReturn(Arrays.asList(ordersWithTwoLines, ordersWithThreeLines));
+        when(orderLineItemDao.findAllByOrderId(anyLong())).thenReturn(ordersWithTwoLines.getOrderLineItems(), ordersWithThreeLines.getOrderLineItems());
+
+
+        // when
+        List<Order> results = orderService.list();
+
+        // then
+        assertThat(results.size()).isEqualTo(2);
+        assertThat(results.get(0).getOrderLineItems().size()).isEqualTo(2);
+        assertThat(results.get(1).getOrderLineItems().size()).isEqualTo(3);
+    }
+
+
+    @Test
+    @DisplayName("주문 상태를 변경할 수 있다.")
+    void changeOrderStatus() {
+        // given
+        String changedStatus = OrderStatus.MEAL.name();
+        Order fixedOrder = Fixtures.order(NOT_EMPTY_TABLE_ID, changedStatus, null, orderLineItems);
+        when(orderDao.findById(NEW_ORDER_ID)).thenReturn(Optional.of(fixedOrder));
+        when(orderLineItemDao.findAllByOrderId(NEW_ORDER_ID)).thenReturn(orderLineItems);
+
+        // when
+        Order result = orderService.changeOrderStatus(NEW_ORDER_ID, fixedOrder);
+
+        // then
+        assertThat(result.getOrderStatus()).isEqualTo(changedStatus);
+        assertThat(result.getOrderLineItems().size()).isEqualTo(orderLineItemsSize);
+    }
+
+    @Test
+    @DisplayName("주문이 존재하지 않아 상태를 변경할 수 없다.")
+    void notExistedOrderChange() {
+        // given
+        Long notExistOrderId = 200L;
+        Order changeStatusOrder = mock(Order.class);
+        when(orderDao.findById(notExistOrderId)).thenReturn(Optional.empty());
+
+        // when - then
+        assertThatThrownBy(() -> orderService.changeOrderStatus(notExistOrderId, changeStatusOrder))
+                .isInstanceOf(IllegalArgumentException.class);
+
+    }
+
+    @Test
+    @DisplayName("주문상태가 완료인 경우 주문 상태를 변경시 IllegalArgumetException 발생")
+    void changeCompletedOrderStatus() {
+
+        // given
+        Order savedOrder = Fixtures.order(NOT_EMPTY_TABLE_ID, OrderStatus.COMPLETION.name(), null, orderLineItems);
+        when(orderDao.findById(NEW_ORDER_ID)).thenReturn(Optional.of(savedOrder));
+
+        // when - then
+        assertThatThrownBy(() -> orderService.changeOrderStatus(NEW_ORDER_ID,savedOrder))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 
 
 }
