@@ -70,4 +70,10 @@ public class Fixtures {
         menuGroup.setName(name);
         return menuGroup;
     }
+    public static MenuGroup menuGroup(String name, Long id) {
+        MenuGroup menuGroup = new MenuGroup();
+        menuGroup.setName(name);
+        menuGroup.setId(id);
+        return menuGroup;
+    }
 }
