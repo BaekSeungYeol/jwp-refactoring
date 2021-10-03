@@ -64,4 +64,10 @@ public class Fixtures {
         orderLineItem.setSeq(seq);
         return orderLineItem;
     }
+
+    public static MenuGroup menuGroup(String name) {
+        MenuGroup menuGroup = new MenuGroup();
+        menuGroup.setName(name);
+        return menuGroup;
+    }
 }
