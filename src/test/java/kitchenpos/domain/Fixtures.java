@@ -76,4 +76,23 @@ public class Fixtures {
         menuGroup.setId(id);
         return menuGroup;
     }
+
+    public static MenuProduct menuProduct(Long menuId, Long productId, int quantity) {
+        MenuProduct menuProduct = new MenuProduct();
+        menuProduct.setMenuId(menuId);
+        menuProduct.setProductId(productId);
+        menuProduct.setQuantity(quantity);
+        return menuProduct;
+    }
+
+    public static Menu menu(String name, Integer price, Long menuGroupId, List<MenuProduct> menuProducts) {
+        Menu menu = new Menu();
+        menu.setName(name);
+        menu.setMenuGroupId(menuGroupId);
+        menu.setMenuProducts(menuProducts);
+        if(price != null) {
+            menu.setPrice(BigDecimal.valueOf(price));
+        }
+        return menu;
+    }
 }
