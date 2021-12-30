@@ -45,13 +45,13 @@ public class Fixtures {
         return order;
     }
 
-    public static OrderTable orderTableWithId(long tableGroupId, int numberOfGuests, boolean empty, Long tableId) {
+    public static OrderTable orderTableWithId(Long tableGroupId, int numberOfGuests, boolean empty, Long tableId) {
         OrderTable orderTable = orderTable(tableGroupId,numberOfGuests,empty);
         orderTable.setId(tableId);
         return orderTable;
     }
 
-    private static OrderTable orderTable(long tableGroupId, int numberOfGuests, boolean empty) {
+    public static OrderTable orderTable(Long tableGroupId, int numberOfGuests, boolean empty) {
         OrderTable orderTable = new OrderTable();
         orderTable.setTableGroupId(tableGroupId);
         orderTable.setNumberOfGuests(numberOfGuests);
@@ -77,13 +77,14 @@ public class Fixtures {
         return menuGroup;
     }
 
-    public static MenuProduct menuProduct(Long menuId, Long productId, int quantity) {
+    public static MenuProduct menuProduct(Long menuId, Long productId, long quantity) {
         MenuProduct menuProduct = new MenuProduct();
         menuProduct.setMenuId(menuId);
         menuProduct.setProductId(productId);
         menuProduct.setQuantity(quantity);
         return menuProduct;
     }
+
 
     public static Menu menu(String name, Integer price, Long menuGroupId, List<MenuProduct> menuProducts) {
         Menu menu = new Menu();
@@ -94,5 +95,30 @@ public class Fixtures {
             menu.setPrice(BigDecimal.valueOf(price));
         }
         return menu;
+    }
+
+    public static Menu menuWithId(String name, Integer price, Long menuGroupId, List<MenuProduct> menuProducts, Long Id) {
+        Menu menu = menu(name, price, menuGroupId, menuProducts);
+        menu.setId(Id);
+        return menu;
+    }
+
+    public static MenuProduct menuProductWithSeq(Long menuId, Long productId, long quantity, Long seq) {
+        MenuProduct menuProduct = menuProduct(menuId, productId, quantity);
+        menuProduct.setSeq(seq);
+        return menuProduct;
+    }
+
+    public static TableGroup tableGroup(List<OrderTable> orderTables, LocalDateTime createdDate) {
+        TableGroup tableGroup = new TableGroup();
+        tableGroup.setOrderTables(orderTables);
+        tableGroup.setCreatedDate(createdDate);
+        return tableGroup;
+    }
+
+    public static TableGroup tableGroupWithId(List<OrderTable> orderTables, LocalDateTime createdDate, Long id) {
+        TableGroup tableGroup = tableGroup(orderTables, createdDate);
+        tableGroup.setId(id);
+        return tableGroup;
     }
 }

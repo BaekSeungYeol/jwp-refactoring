@@ -1,9 +1,12 @@
 package kitchenpos.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kitchenpos.dao.OrderDao;
 import kitchenpos.dao.OrderTableDao;
+import kitchenpos.domain.Order;
 import kitchenpos.domain.OrderStatus;
 import kitchenpos.domain.OrderTable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,9 @@ public class TableService {
     private final OrderDao orderDao;
     private final OrderTableDao orderTableDao;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     public TableService(final OrderDao orderDao, final OrderTableDao orderTableDao) {
         this.orderDao = orderDao;
         this.orderTableDao = orderTableDao;
@@ -24,7 +30,6 @@ public class TableService {
     @Transactional
     public OrderTable create(final OrderTable orderTable) {
         orderTable.setTableGroupId(null);
-
         return orderTableDao.save(orderTable);
     }
 
