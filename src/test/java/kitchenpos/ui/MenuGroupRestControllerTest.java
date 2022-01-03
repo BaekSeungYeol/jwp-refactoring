@@ -3,11 +3,13 @@ package kitchenpos.ui;
 import kitchenpos.BaseControllerTest;
 import kitchenpos.domain.Fixtures;
 import kitchenpos.domain.MenuGroup;
+import kitchenpos.dto.MenuGroupRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static kitchenpos.domain.TestFixture.메뉴_신규_NAME;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,17 +24,16 @@ class MenuGroupRestControllerTest extends BaseControllerTest {
     void createMenuGroup() throws Exception {
 
         // given
-        String name = "메뉴그룹1";
-        MenuGroup menuGroup = Fixtures.menuGroup(name);
+        MenuGroupRequest menuGroupRequest = new MenuGroupRequest(메뉴_신규_NAME);
 
         // when - then
         mockMvc.perform(post("/api/menu-groups")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(menuGroup)))
+                .content(objectMapper.writeValueAsString(menuGroupRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value(name));
+                .andExpect(jsonPath("$.name").value(메뉴_신규_NAME));
 
     }
 
