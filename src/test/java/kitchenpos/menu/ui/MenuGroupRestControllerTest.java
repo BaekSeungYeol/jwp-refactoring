@@ -1,16 +1,12 @@
-package kitchenpos.ui;
+package kitchenpos.menu.ui;
 
 import kitchenpos.BaseControllerTest;
-import kitchenpos.domain.Fixtures;
-import kitchenpos.domain.MenuGroup;
-import kitchenpos.dto.MenuGroupRequest;
-import org.junit.jupiter.api.BeforeEach;
+import kitchenpos.menu.dto.MenuGroupRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import static kitchenpos.domain.TestFixture.메뉴_신규_NAME;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

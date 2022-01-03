@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import kitchenpos.menu.dao.MenuGroupRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class MenuServiceTest {
 	@Mock
 	private MenuProductDao menuProductDao;
 	@Mock
-	private MenuGroupDao menuGroupDao;
+	private MenuGroupRepository menuGroupRepository;
 	@Mock
 	private MenuDao menuDao;
 	@InjectMocks
@@ -68,7 +69,7 @@ public class MenuServiceTest {
 		MenuProduct savedMenuProduct = Fixtures.menuProductWithSeq(NEW_MENU_ID, SAVED_PRODUCT_ID, 1, 1L);
 		MenuProduct savedMenuProduct2 = Fixtures.menuProductWithSeq(NEW_MENU_ID, SAVED_PRODUCT2_ID, 1, 2L);
 
-		when(menuGroupDao.existsById(SAVED_MENU_GROUP_ID)).thenReturn(true);
+		when(menuGroupRepository.existsById(SAVED_MENU_GROUP_ID)).thenReturn(true);
 		when(productDao.findById(anyLong())).thenReturn(Optional.of(savedProduct), Optional.of(savedProduct2));
 		when(menuDao.save(menu)).thenReturn(savedMenu);
 		when(menuProductDao.save(any())).thenReturn(savedMenuProduct, savedMenuProduct2);
@@ -99,7 +100,7 @@ public class MenuServiceTest {
 	void createNotExistMenuGroup() {
 		//given
 		Menu notExistMenuGroupMenu = Fixtures.menu("메뉴1", BigDecimal.valueOf(10000), 100L, menuProducts);
-		when(menuGroupDao.existsById(any())).thenReturn(false);
+		when(menuGroupRepository.existsById(any())).thenReturn(false);
 
 		//when-then
 		assertThatThrownBy(() -> menuService.create(notExistMenuGroupMenu))
@@ -111,7 +112,7 @@ public class MenuServiceTest {
 	void createNotExistProduct() {
 		//given
 		Menu notExistProductMenu = Fixtures.menu("메뉴1", BigDecimal.valueOf(10000), SAVED_MENU_GROUP_ID, Arrays.asList(mock(MenuProduct.class)));
-		when(menuGroupDao.existsById(any())).thenReturn(true);
+		when(menuGroupRepository.existsById(any())).thenReturn(true);
 		when(productDao.findById(any())).thenReturn(Optional.empty());
 
 		//when-then
@@ -124,7 +125,7 @@ public class MenuServiceTest {
 	void createPriceLessThanZero() {
 		//given
 		Menu greaterThanSumOfProductPriceMenu = Fixtures.menu("메뉴1", BigDecimal.valueOf(100000), SAVED_MENU_GROUP_ID, menuProducts);
-		when(menuGroupDao.existsById(SAVED_MENU_GROUP_ID)).thenReturn(true);
+		when(menuGroupRepository.existsById(SAVED_MENU_GROUP_ID)).thenReturn(true);
 		when(productDao.findById(anyLong())).thenReturn(Optional.of(savedProduct), Optional.of(savedProduct2));
 
 		//when-then
