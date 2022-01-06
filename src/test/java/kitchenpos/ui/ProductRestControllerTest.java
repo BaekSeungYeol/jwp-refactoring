@@ -1,11 +1,14 @@
 package kitchenpos.ui;
 
+import static kitchenpos.domain.TestFixture.상품_신규_NAME;
+import static kitchenpos.domain.TestFixture.상품_신규_PRICE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.math.BigDecimal;
 
+import kitchenpos.dto.ProductRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -21,19 +24,17 @@ public class ProductRestControllerTest extends BaseControllerTest {
     @DisplayName("상품을 등록할 수 있다 - 상품 등록 후, 등록된 상품의 아이디를 포함한 정보를 반환한다.")
     void create() throws Exception {
         //given
-        String name = "상품1";
-        BigDecimal price = BigDecimal.valueOf(1000);
-        Product product = Fixtures.product(name, price);
+        ProductRequest productRequest = new ProductRequest(상품_신규_NAME, 상품_신규_PRICE);
 
         //when-then
         mockMvc.perform(post("/api/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product)))
+                .content(objectMapper.writeValueAsString(productRequest)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNotEmpty())
-                .andExpect(jsonPath("$.name").value(name))
-                .andExpect(jsonPath("$.price").value(price.longValue()));
+                .andExpect(jsonPath("$.name").value(상품_신규_NAME))
+                .andExpect(jsonPath("$.price").value(상품_신규_PRICE.longValue()));
     }
 
     @Test

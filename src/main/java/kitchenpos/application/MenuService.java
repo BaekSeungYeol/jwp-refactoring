@@ -25,7 +25,7 @@ public class MenuService {
     private final ProductDao productDao;
 
     public MenuService(
-            final MenuDao menuDao,
+            final MenuDao  menuDao,
             final MenuGroupRepository menuGroupRepository,
             final MenuProductDao menuProductDao,
             final ProductDao productDao) {
