@@ -3,22 +3,15 @@ package kitchenpos.application;
 import static kitchenpos.domain.TestFixture.상품_신규_NAME;
 import static kitchenpos.domain.TestFixture.상품_신규_PRICE;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 
-import kitchenpos.dto.ProductRequest;
-import kitchenpos.dto.ProductResponse;
+import kitchenpos.product.dto.ProductRequest;
+import kitchenpos.product.dto.ProductResponse;
+import kitchenpos.product.application.ProductService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import kitchenpos.dao.ProductDao;
-import kitchenpos.domain.Product;
-import kitchenpos.domain.Fixtures;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

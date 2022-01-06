@@ -6,16 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.math.BigDecimal;
-
-import kitchenpos.dto.ProductRequest;
+import kitchenpos.product.dto.ProductRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import kitchenpos.BaseControllerTest;
-import kitchenpos.domain.Fixtures;
-import kitchenpos.domain.Product;
 
 @DisplayName("상품 Controller 테스트")
 public class ProductRestControllerTest extends BaseControllerTest {
