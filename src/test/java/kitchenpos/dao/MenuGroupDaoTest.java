@@ -2,7 +2,7 @@ package kitchenpos.dao;
 
 import kitchenpos.BaseDaoTest;
 import kitchenpos.domain.Fixtures;
-import kitchenpos.domain.MenuGroup;
+import kitchenpos.menu.domain.MenuGroup;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
