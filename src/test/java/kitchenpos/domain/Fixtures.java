@@ -8,14 +8,6 @@ import java.util.List;
 
 public class Fixtures {
 
-    public static Product product(String name, BigDecimal price) {
-        return new Product(name, price);
-    }
-
-    public static Product productWithId(String name, BigDecimal price, Long id) {
-        return new Product(id, name, price);
-    }
-
     public static MenuGroup menuGroup(String name) {
         return new MenuGroup(name);
     }
